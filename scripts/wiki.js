@@ -2,27 +2,26 @@ const fetch = require('node-fetch');
 module.exports = function (robot) {
     robot.respond(/search wiki (.*)/i, function (res) {
         searchQuery = res.match[1]
-        endpoint = `http://freshwiki.manjaro.org/w/api.php?origin=*&action=opensearch&srlimit=10&format=json&search=${searchQuery}`;
+        endpoints = ["http://freshwiki.manjaro.org/", "#https://wiki.archlinux.org/"]
+        query = `api.php?action=query&format=json&generator=search&gsrnamespace=0&gsrlimit=4&gsrsearch=${searchQuery}`;
+        output = "`I found something, hope it helps!` <br/>"
+        for (let wiki in endpoints) {
+            if (!wiki.startsWith("#")) {
+                fetch(endpoints[wiki] + query)
+                    .then(response => response.json())
+                    .then(data => {
+                        result = data.query.pages
 
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                results = []
-                for (var title of data[1]) {
-                    value = [title] 
-                    results.push(value)                 
-                }
-                data[3].forEach(function (value, i) {
-                    results[i].push(value)
-                });
-                output = "I found some results! :robot: <br /> "
-                results.forEach(function (value, i) {
-                    output += `[${value[0]}](${value[1]}) <br /> `
-                });
-                console.log(output)
-                res.reply(output)
-            })
-            .catch((err) => console.log(err));
+                        for (let [key, value] of Object.entries(result)) {
+                            output += `[${value.title}](${endpoints[wiki]}?curid=${value.pageid})<br/>`
+                        }
+                        if (i = 1) {
+                            res.reply(output)
+                        }
+
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
     })
 }
