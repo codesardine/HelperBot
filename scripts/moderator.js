@@ -154,18 +154,6 @@ const badWords = [
     "xxx"
 ];
 
-const Discourse = require('discourse-js');
-const discourse = new Discourse();
-const KEY = process.env.HUBOT_DISCOURSE_KEY
-const USERNAME = process.env.HUBOT_DISCOURSE_USERNAME
-const SERVER = process.env.HUBOT_DISCOURSE_SERVER
-discourse.config(
-    {
-        KEY,
-        USERNAME,
-        SERVER
-    }
-)
 module.exports = (robot) => {
     robot.hear(/.*/i, (res) => {
         msg = res.message
@@ -175,9 +163,9 @@ module.exports = (robot) => {
             link = res.message.slug
             regex = new RegExp("\\b" + word + "\\b", "i")
             function alertMods(user, link, word) {
-                //res.robot.messageRoom("moderators", `@${user}, breaking-community-rules!`, `${link}
-                //Bad word found ( ${word} ), follow excalation policy.`
-                //) 
+                res.robot.messageRoom("moderators", `@${user}, breaking-community-rules!`, `${link}
+                Bad word found ( ${word} ), follow excalation policy.`
+                ) 
                 console.log(res)
 
                 discourse.posts.reply({

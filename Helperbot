@@ -1,2 +1,2 @@
 #!/bin/bash
-./bin/hubot
+cd /opt/manjaro/tools/HelperBot && ./bin/hubot -a discourse-adapter
