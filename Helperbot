@@ -1,2 +1,2 @@
 #!/bin/bash
-cd /opt/manjaro/tools/HelperBot && ./bin/hubot -a discourse-adapter
+cd /opt/manjaro/tools/HelperBot && git pull && ./bin/hubot -a discourse-adapter
